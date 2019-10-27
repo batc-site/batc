@@ -16,7 +16,7 @@ var static_node=9;
 // const rpc2 = new eosjs_jsonrpc.JsonRpc('https://jungle2.cryptolions.io');
 var contract_code='expcorg12345';
 var contract_scope='expcorg12345';
-var contract_currency='EXPC';
+var contract_currency='BATC';
 var chainId='aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906';
 const rpc = new eosjs_jsonrpc.JsonRpc('https://eos.greymass.com');
 const rpc2 = new eosjs_jsonrpc.JsonRpc('https://eos.greymass.com');
@@ -525,6 +525,7 @@ function expcinfo2() {
             })
 
             expcinfo2_data(ret2);
+            // console.log(ret2,"sdsd")
             // getTableRows(ret);
 
         } catch (e) {
@@ -612,6 +613,7 @@ function users(user_sess) {
                         $("#user_t_code").html(user_sess+'');
                         var node_link=location.protocol +'//'+ location.host+'?memo='+user_sess+"";
                         $("#node_link").html(node_link);
+                        $("#node_link").attr(node_link,href);
                         $(".user_t_code_show").show();
                     }else if(s[i]['t_code'] <= 0 ){
                         $("#user_t_code").html('0');
@@ -854,7 +856,7 @@ function nodetype3_data(data) {
     }
     // console.log(cur_quan_total);
     // console.log(total_quan);
-    var cur_quan_html='<s style="color: #03ecc1;">'+(parseInt(cur_quan_total)+parseInt(static_node)) +'</s>' + '<s style="color: #fff">/</s>' + total_quan;
+    var cur_quan_html='<s>'+(parseInt(cur_quan_total)+parseInt(static_node)) +'</s>' + '<s>/</s>' + total_quan;
     $("#cur_quan").html(cur_quan_html);
     $(".nodetype3").html(html);
     scatter_status();
@@ -890,7 +892,8 @@ function time_show_down(){
     var end_time_stamp=getSession('end_time_stamp');
     var time=(end_time_stamp-currtime_stamp);
     // console.log(time);
-    var str=vm.languageCon.count_down + transTime(time);
+    // var str=vm.languageCon.count_down + transTime(time);
+    var str=transTime(time);
     $("#SecondToDate").html(str);
 }
 function transTime(timestamp) {
@@ -898,7 +901,8 @@ function transTime(timestamp) {
     if (timestamp >= 86400) {
         $days = Math.floor(timestamp / 86400);
         timestamp = timestamp % 86400;
-        result = $days + vm.languageCon.day;
+        // result = $days + vm.languageCon.day;
+        result += '<span>'+$days + '<img src="./images/day.png" alt="" /></span>';
         if (timestamp > 0) {
             result += '';
         }
@@ -909,7 +913,8 @@ function transTime(timestamp) {
         if ($hours < 10) {
             $hours = '0' + $hours;
         }
-        result += $hours + vm.languageCon.hour;
+        // result += $hours + vm.languageCon.hour;
+        result += '<span>'+$hours + '<img src="./images/hours.png" alt="" /></span>';
     }
     if (timestamp >= 60) {
         $minutes = Math.floor(timestamp / 60);
@@ -917,13 +922,17 @@ function transTime(timestamp) {
         if ($minutes < 10) {
             $minutes = '0' + $minutes;
         }
-        result += $minutes + vm.languageCon.minute;
+        // result += $minutes + vm.languageCon.minute;
+        
+        result += '<span>'+$minutes + '<img src="./images/min.png" alt="" /></span>';
     }
     $secend = Math.floor(timestamp);
     if ($secend < 10) {
         $secend = '0' + $secend;
     }
-    result += '<span style="color:#fe566a">'+$secend + vm.languageCon.second+'</span>';
+    // result += '<span>'+$secend + vm.languageCon.second+'</span>';
+    
+    result += '<span>'+$secend + '<img src="./images/sec.png" alt="" /></span>';
     return result;
 }
 
@@ -937,7 +946,7 @@ function investment(data){
     var end_time_stamp=getTimestamp(end_time);
     var currtime_stamp=currTimestamp();
     var curr_quan_font='';
-    var show_size=vm.languageCon.the_first+ '<br>'  + sort + '<br>' + vm.languageCon.round ;
+    var show_size=vm.languageCon.the_first+ sort + vm.languageCon.round ;
     var show_size_null=vm.languageCon.sell;
     var current_quantity= data.current_quantity;
     if(currtime_stamp > start_time_stamp && currtime_stamp < end_time_stamp){
@@ -952,10 +961,10 @@ function investment(data){
     }
     var start_price_usdt=decimal(data.start_price_usdt,4);
     return '<li class="'+classs+' " style="">'+
-        '<div class="li li-1 white" style="">'+ show_size + '</div>' +
+        '<div class="li li-1 white">'+ show_size + '</div>' +
         '<div class="li li-2"><div class="top">' +
         '<div class="left text-center ">' +
-        '<span class="blue font-14">'+ current_quantity +' EXPC</span>' +
+        '<span class="blue font-14">'+ current_quantity +' BATC</span>' +
         '<br><span>'+vm.languageCon.residual+'</span></div>' +
         '<div class="right text-center">' +
         '<span class="font-20 orange">'+start_price_usdt+' USDT</span>' +
@@ -1008,7 +1017,7 @@ function myChart(value1,value2){
         series: [
             {
                 type:'pie',
-                radius: ['70%', '80%'],
+                radius: ['68%', '80%'],
                 avoidLabelOverlap: false,
                 label: {
                     normal: {
@@ -1023,7 +1032,7 @@ function myChart(value1,value2){
                         }
                     }
                 },
-                color:['#23c8ff','#7232ff','#ffa022','#fe566a'],
+                color:['#0375bf','#ffffff','#0375bf','#ffffff'],
                 labelLine: {
                     normal: {
                         show: false

@@ -3,10 +3,10 @@ var vm = new Vue({
     data: {
         language:{
             Chinese: {
-                pool_total:'矿池总量',
-                circulation:'流通总量',
-                node_number:'节点数量',
-                pos_min:'POS挖矿数量',
+                pool_total:'矿池',
+                circulation:'流通',
+                node_number:'节点',
+                pos_min:'挖矿',
                 billion:'亿',
                 thousand:'万',
                 excavated:'已挖总量',
@@ -34,7 +34,7 @@ var vm = new Vue({
                 purchase:'购买',
                 login:'登录',
                 no_login:'未登录',
-                with_expc:'使用EOS钱包参与EXPC',
+                with_expc:'使用EOS钱包参与BATC',
                 amount:'金额',
                 transfer:'转账',
                 you_must:'您在转账时必须填写上 方的Memo,否则交易将无法成立。请勿使用交易所账户转账。memo应该是填写你的推荐节点码',
@@ -69,10 +69,10 @@ var vm = new Vue({
                 announcementList1Title:'标题',
                 announcementList1Time:'2019-09-09',
                 announcementList1Content:'内容',
-                news1_tit:'关于启动EXPC免费空投条件公告',
-                news1_con:'广大EXPC全球玩家，EXPC会员空投条件为EXPC价值为 1 USDT时全球启动',
-                news2_tit:'关于EXPC上交易所开盘价格公告',
-                news2_con:'EXPC全球玩家，EXPC登录交易所的开盘价格确定为 1 USDT',
+                news1_tit:'关于启动BATC免费空投条件公告',
+                news1_con:'广大BATC全球玩家，BATC会员空投条件为BATC价值为 1 USDT时全球启动',
+                news2_tit:'关于BATC上交易所开盘价格公告',
+                news2_con:'BATC全球玩家，BATC登录交易所的开盘价格确定为 1 USDT',
                 news1_time:'2019-09-22',
                 news2_time:'2019-09-22',
                 sell:'售<br><br>罄',
@@ -81,10 +81,10 @@ var vm = new Vue({
                 sell:'Sell<br><br>out ',
                 news2_time:'2019-09-22',
                 news1_time:'2019-09-22',
-                news1_tit:'Announcement on the condition of Launching EXPC Free Airdrop',
-                news1_con:'The Condition of Free Airdrop will be launched upon the EXPC valuing 1 USDT',
-                news2_tit:'Announcement on the opening price of EXPC listed on Exchange',
-                news2_con:'The opening price of EXPC listed on Exchange is 1 USDT',
+                news1_tit:'Announcement on the condition of Launching BATC Free Airdrop',
+                news1_con:'The Condition of Free Airdrop will be launched upon the BATC valuing 1 USDT',
+                news2_tit:'Announcement on the opening price of BATC listed on Exchange',
+                news2_con:'The opening price of BATC listed on Exchange is 1 USDT',
                 surplus :'Surplus ',
                 countdown :'Countdown of Exchange Opening ',
                 minute :'m ',
@@ -113,14 +113,14 @@ var vm = new Vue({
                 you_must :'You must fill in the above Momo when transferring money, otherwise the transaction will not be established. Do not use exchange account to transfer money. Memo should fill in your recommended node code',
                 transfer :'Transfer',
                 amount:'amount',
-                with_expc:'Participate in EXPC with EOS Wallet',
+                with_expc:'Participate in BATC with EOS Wallet',
                 no_login:'Not logged in',
                 login:'Login',
                 purchase:'Purchase',
-                pool_total:'Total Pools',
-                circulation:'Total circulation',
-                node_number:'Node Number',
-                pos_min:'POS Mining Number',
+                pool_total:'Pools',
+                circulation:'Circulation',
+                node_number:'Node',
+                pos_min:'Mining',
                 billion:'Billion',
                 thousand:'ten thousand',
                 excavated:'Total excavated amount',
@@ -176,7 +176,14 @@ var vm = new Vue({
         },
         login:false,
         transfer:false,
-
+        contract_code:'expcorg12345',
+        contract_scope:'expcorg12345',
+        contract_currency:'BATC',
+        chainId:'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
+        rpc:new eosjs_jsonrpc.JsonRpc('https://eos.greymass.com'),
+        rpc2:new eosjs_jsonrpc.JsonRpc('https://eos.greymass.com'),
+        ret:[],
+        activeIndex:1,
     },
     methods: {
         languageTab(language){
@@ -199,7 +206,24 @@ var vm = new Vue({
         close(){
             this.login = false
             this.transfer = false
-        }
+        },
+        rounds1() {
+            // const rpc2 = new eosjs_jsonrpc.JsonRpc('https://eos.greymass.com');
+            (async () => {
+                try {
+                    this.ret = await this.rpc2.get_table_rows({
+                        code: this.contract_code,
+                        table: 'rounds1',
+                        scope: this.contract_scope,
+                    })
+console.log(this.ret.rows)
+
+                } catch (e) {
+                    console.log(e);
+                }
+            })();
+        },
+        handleTabsEdit(){},
 
     },
     mounted: function () {
@@ -208,7 +232,9 @@ var vm = new Vue({
         } else if(this.languageBlooen == "English") {
             this.languageCon = this.language.English
         }
-    },});
+        this.rounds1()
+    },
+});
 function reload_fun(){
     location.reload();
 }
